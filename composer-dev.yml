@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:9.6
+    container_name: olist_postgres
+    env_file: .env
+    ports:
+      - "32007:5432"
