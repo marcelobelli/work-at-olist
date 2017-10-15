@@ -1,2 +1,4 @@
 -r production.txt
 ipython
+pytest-django
+pytest-sugar
