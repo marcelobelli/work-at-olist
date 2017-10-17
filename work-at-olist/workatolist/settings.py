@@ -34,6 +34,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_extensions',
     'model_mommy',
+
+    # Local apps
+
+    'core',
 ]
 
 MIDDLEWARE_CLASSES = [
