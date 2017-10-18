@@ -9,24 +9,25 @@ from ..serializers import ChannelDetailSerializer, ChannelListSerializer
 class TestChannelListSerializer(APITestCase):
 
     def setUp(self):
+        factory = APIRequestFactory()
+        url = reverse('api:channel-list')
+
+        self.request = factory.get(url)
         self.channel = mommy.make(Channel)
+
 
     def test_channellist_fields(self):
         """ChannelListSerializer must have the fields: channel, url"""
-        factory = APIRequestFactory()
-        url = reverse('api:channel-list')
-        request = factory.get(url)
-
-        serializer = ChannelListSerializer(self.channel, context={'request': request})
+        serializer = ChannelListSerializer(self.channel, context={'request': self.request})
         result = set(serializer.data.keys())
         expected_result = {'channel', 'url'}
 
         self.assertEqual(result, expected_result)
 
     def test_channeldetail_fields(self):
-        """ChannelDetailSerializer must have the fields: channel"""
-        serializer = ChannelDetailSerializer(self.channel)
+        """ChannelDetailSerializer must have the fields: channel, categories"""
+        serializer = ChannelDetailSerializer(self.channel, context={'request': self.request})
         result = set(serializer.data.keys())
-        expected_result = {'channel'}
+        expected_result = {'channel', 'categories'}
 
         self.assertEqual(result, expected_result)
