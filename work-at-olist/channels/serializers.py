@@ -24,6 +24,13 @@ class ChannelDetailSerializer(serializers.ModelSerializer):
     """
     channel = serializers.StringRelatedField(source='name')
 
+    categories = serializers.HyperlinkedRelatedField(
+        view_name='api:category-detail',
+        lookup_field='slug',
+        read_only=True,
+        many=True
+    )
+
     class Meta:
         model = Channel
-        fields = ('channel', )
+        fields = ('channel', 'categories')
