@@ -1,6 +1,6 @@
 from model_mommy import mommy
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.test import APIRequestFactory, APITestCase
 
 from django.urls import reverse
 
@@ -24,8 +24,11 @@ class ChannelsListAPITest(APITestCase):
         for _ in range(5):
             mommy.make(Channel)
 
+        factory = APIRequestFactory()
+        request = factory.get(self.url)
+
         channels = Channel.objects.all()
-        serializer = ChannelListSerializer(channels, many=True)
+        serializer = ChannelListSerializer(channels, many=True, context={'request': request})
 
         response = self.client.get(self.url)
 
