@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_extensions',
     'model_mommy',
+    'mptt',
 
     # Local apps
 
