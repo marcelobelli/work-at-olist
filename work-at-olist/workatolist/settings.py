@@ -39,6 +39,7 @@ INSTALLED_APPS = [
 
     'core',
     'channels',
+    'categories',
 ]
 
 MIDDLEWARE_CLASSES = [
