@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'model_mommy',
     'mptt',
+    'rest_framework_recursive',
 
     # Local apps
 
