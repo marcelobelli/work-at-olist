@@ -7,6 +7,9 @@ from core.models import BaseModel
 
 
 class Category(BaseModel, MPTTModel):
+    """
+        Category Model
+    """
     channel = models.ForeignKey(
         'channels.Channel',
         verbose_name=_('Channel'),
