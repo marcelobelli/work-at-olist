@@ -3,19 +3,22 @@ from rest_framework.test import APIRequestFactory, APITestCase
 
 from channels.models import Channel
 from ..models import Category
-from ..serializers import CategorySerializer
+from ..serializers import CategorySerializer, ChildrenSerializer
 
 
 class TestCategorySerializer(APITestCase):
 
-    def test_category_fields(self):
-        """CategorySerializer must have the fields: category, url, children, parent, channel"""
+    def setUp(self):
         factory = APIRequestFactory()
         url = reverse('api:category-list')
-        request = factory.get(url)
         channel = Channel.objects.create(**{'name': 'Big Market'})
-        category = Category.objects.create(**{'name': 'Video game', 'channel': channel})
-        serializer = CategorySerializer(category, context={'request': request})
+
+        self.request = factory.get(url)
+        self.category = Category.objects.create(**{'name': 'Video game', 'channel': channel})
+
+    def test_categoryserializer_fields(self):
+        """CategorySerializer must have the fields: category, url, children, parent, channel"""
+        serializer = CategorySerializer(self.category, context={'request': self.request})
         result = set(serializer.data.keys())
         expected_result = {
             'category',
@@ -23,6 +26,18 @@ class TestCategorySerializer(APITestCase):
             'children',
             'parent',
             'channel'
+        }
+
+        self.assertEqual(result, expected_result)
+
+    def test_childrenserializer_fields(self):
+        """ChildrenSerializer must have the fields: category, url, children"""
+        serializer = ChildrenSerializer(self.category, context={'request': self.request})
+        result = set(serializer.data.keys())
+        expected_result = {
+            'category',
+            'url',
+            'children',
         }
 
         self.assertEqual(result, expected_result)
