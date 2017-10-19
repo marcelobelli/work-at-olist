@@ -1,3 +1,5 @@
+import sys
+
 from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
@@ -36,6 +38,23 @@ class Category(BaseModel, MPTTModel):
         self.slug = slug
 
         super(Category, self).save()
+
+    @staticmethod
+    def import_categories(channel, categories_list):
+        parent = None
+        count = 0
+
+        for category in categories_list:
+            parent, created = Category.objects.get_or_create(
+                name=category,
+                channel=channel,
+                parent=parent
+            )
+            if created:
+                sys.stdout.write(f'{category} created!\n')
+                count += 1
+
+        return count
 
     class MPTTMeta:
         order_insertion_by = ['name']
