@@ -36,3 +36,6 @@ class Category(BaseModel, MPTTModel):
         self.slug = slug
 
         super(Category, self).save()
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
