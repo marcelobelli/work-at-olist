@@ -5,9 +5,9 @@ from channels.serializers import ChannelListSerializer
 from .models import Category
 
 
-class CategorySerializer(serializers.ModelSerializer):
+class ChildrenSerializer(serializers.ModelSerializer):
     """
-        Serializer for category data
+        Serializer for category children data
     """
     category = serializers.StringRelatedField(source='name')
     children = serializers.ListSerializer(child=RecursiveField())
@@ -17,8 +17,25 @@ class CategorySerializer(serializers.ModelSerializer):
         lookup_field='slug'
     )
 
+    class Meta:
+        model = Category
+        fields = ('category', 'url', 'children')
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    """
+        Serializer for category data
+    """
+    category = serializers.StringRelatedField(source='name')
+    children = serializers.ListSerializer(child=RecursiveField('ChildrenSerializer'))
+
+    url = serializers.HyperlinkedIdentityField(
+        view_name='api:category-detail',
+        lookup_field='slug'
+    )
+
     channel = ChannelListSerializer()
-    
+
     class Meta:
         model = Category
         fields = (
