@@ -1,6 +1,6 @@
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.test import APIRequestFactory, APITestCase
 
 from channels.models import Channel
 
@@ -21,12 +21,15 @@ class CategoryListAPI(APITestCase):
 
     def test_get_data_from_category_list(self):
         """Must return all categories from db"""
+        factory = APIRequestFactory()
+        request = factory.get(self.url)
+
         channel = Channel.objects.create(**{'name': 'Big Market'})
         for category in ['Video Game', 'Computers', 'Smartphones']:
             Category.objects.create(**{'name': category, 'channel': channel})
 
         categories = Category.objects.all()
-        serializer = CategorySerializer(categories, many=True)
+        serializer = CategorySerializer(categories, many=True, context={'request': request})
 
         response = self.client.get(self.url)
 
@@ -48,7 +51,10 @@ class CategoryDetailAPI(APITestCase):
 
     def test_get_data_from_category_detail(self):
         """Must return category from db"""
-        serializer = CategorySerializer(self.category)
+        factory = APIRequestFactory()
+        request = factory.get(self.url)
+
+        serializer = CategorySerializer(self.category, context={'request': request})
 
         response = self.client.get(self.url)
 
