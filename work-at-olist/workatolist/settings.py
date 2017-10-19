@@ -123,3 +123,13 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+# Rest Framework Settings
+
+REST_FRAMEWORK_PAGE_SIZE = config('PAGE_SIZE', default=20, cast=int)
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': REST_FRAMEWORK_PAGE_SIZE,
+}
