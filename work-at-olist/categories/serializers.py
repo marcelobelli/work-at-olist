@@ -22,19 +22,38 @@ class ChildrenSerializer(serializers.ModelSerializer):
         fields = ('category', 'url', 'children')
 
 
-class CategorySerializer(serializers.ModelSerializer):
+class ParentSerializer(serializers.ModelSerializer):
     """
-        Serializer for category data
+        Serializer for category parent data
     """
     category = serializers.StringRelatedField(source='name')
-    children = serializers.ListSerializer(child=RecursiveField('ChildrenSerializer'))
+    parent = RecursiveField()
 
     url = serializers.HyperlinkedIdentityField(
         view_name='api:category-detail',
         lookup_field='slug'
     )
 
+    class Meta:
+
+        model = Category
+        fields = ('category', 'url', 'parent')
+
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    """
+        Serializer for category data
+    """
+    category = serializers.StringRelatedField(source='name')
+    children = serializers.ListSerializer(child=RecursiveField('ChildrenSerializer'))
     channel = ChannelListSerializer()
+    parent = ParentSerializer()
+
+    url = serializers.HyperlinkedIdentityField(
+        view_name='api:category-detail',
+        lookup_field='slug'
+    )
 
     class Meta:
         model = Category
