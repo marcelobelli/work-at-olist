@@ -28,18 +28,24 @@ class ChannelsListAPITest(APITestCase):
         request = factory.get(self.url)
 
         channels = Channel.objects.all()
-        serializer = ChannelListSerializer(channels, many=True, context={'request': request})
+        serializer = ChannelListSerializer(
+            channels, many=True,
+            context={'request': request}
+        )
 
         response = self.client.get(self.url)
 
-        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.data['results'], serializer.data)
 
 
 class ChannelsDetailAPITest(APITestCase):
 
     def setUp(self):
         self.channel = mommy.make(Channel)
-        self.url = reverse('api:channel-detail', kwargs={'slug': self.channel.slug})
+        self.url = reverse(
+            'api:channel-detail',
+            kwargs={'slug': self.channel.slug}
+        )
 
     def test_get_response_from_channel_detail(self):
         """GET method must return 200"""
