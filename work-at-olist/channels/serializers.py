@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework_nested.relations import NestedHyperlinkedRelatedField
 
+from categories.serializers import CategorySimpleSerializer
 from .models import Channel
 
 
@@ -25,13 +26,7 @@ class ChannelDetailSerializer(serializers.ModelSerializer):
     """
     channel = serializers.StringRelatedField(source='name')
 
-    categories = NestedHyperlinkedRelatedField(
-        view_name='api:category-detail',
-        lookup_field='slug',
-        read_only=True,
-        many=True,
-        parent_lookup_kwargs={'channel_slug': 'channel__slug'}
-    )
+    categories = CategorySimpleSerializer(many=True)
 
     class Meta:
         model = Channel
