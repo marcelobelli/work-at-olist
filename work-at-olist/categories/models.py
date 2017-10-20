@@ -30,12 +30,10 @@ class Category(BaseModel, MPTTModel):
     )
 
     def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
 
         if self.parent:
-            slug = slugify(f'{self.channel.slug}-{self.parent.name}-{self.name}')
-        else:
-            slug = slugify(f'{self.channel.slug}-{self.name}')
-        self.slug = slug
+            self.slug = f'{self.parent.slug}-{self.slug}'
 
         super(Category, self).save()
 
