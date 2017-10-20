@@ -11,7 +11,11 @@ from ..serializers import CategorySerializer
 class CategoryListAPI(APITestCase):
 
     def setUp(self):
-        self.url = reverse('api:category-list')
+        self.channel = Channel.objects.create(**{'name': 'Big Market'})
+        self.url = reverse(
+            'api:category-list',
+            kwargs={'channel_slug': self.channel.slug}
+        )
 
     def test_get_response_from_category_list(self):
         """GET method must return 200"""
@@ -24,24 +28,33 @@ class CategoryListAPI(APITestCase):
         factory = APIRequestFactory()
         request = factory.get(self.url)
 
-        channel = Channel.objects.create(**{'name': 'Big Market'})
+
         for category in ['Video Game', 'Computers', 'Smartphones']:
-            Category.objects.create(**{'name': category, 'channel': channel})
+            cat_dict = {'name': category, 'channel': self.channel}
+            Category.objects.create(**cat_dict)
 
         categories = Category.objects.all()
-        serializer = CategorySerializer(categories, many=True, context={'request': request})
+        serializer = CategorySerializer(
+            categories,
+            many=True,
+            context={'request': request}
+        )
 
         response = self.client.get(self.url)
 
-        self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.data['results'], serializer.data)
 
 
 class CategoryDetailAPI(APITestCase):
 
     def setUp(self):
         channel = Channel.objects.create(**{'name': 'Big Market'})
-        self.category = Category.objects.create(**{'name': 'Video game', 'channel': channel})
-        self.url = reverse('api:category-detail', kwargs={'slug': self.category.slug})
+        cat_dict = {'name': 'Video game', 'channel': channel}
+        self.category = Category.objects.create(**cat_dict)
+        self.url = reverse(
+            'api:category-detail',
+            kwargs={'channel_slug': channel.slug, 'slug': self.category.slug}
+        )
 
     def test_get_response_from_category_detail(self):
         """GET method must return 200"""
@@ -54,7 +67,10 @@ class CategoryDetailAPI(APITestCase):
         factory = APIRequestFactory()
         request = factory.get(self.url)
 
-        serializer = CategorySerializer(self.category, context={'request': request})
+        serializer = CategorySerializer(
+            self.category,
+            context={'request': request}
+        )
 
         response = self.client.get(self.url)
 
