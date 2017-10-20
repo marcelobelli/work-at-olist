@@ -10,14 +10,8 @@ class APIRootView(APIView):
 
     def get(self, request):
         data = {
-            'channels': {
-                'url': reverse('api:channel-list', request=request),
-                'description': 'Show all Channels',
-            },
-            'categories': {
-                'url': reverse('api:category-list', request=request),
-                'description': 'Show all Categories',
-            },
+            'url': reverse('api:channel-list', request=request),
+            'description': 'Show all Channels',
         }
 
         return Response(data)
