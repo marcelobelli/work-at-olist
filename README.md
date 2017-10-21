@@ -157,3 +157,12 @@ $ cp local.env .env
 $ python work-at-olist/manage.py migrate
 $ python work-at-olist/manage.py runserver
 ~~~~
+
+### Importing categories
+
+manage.py import_categories `Channel` `file.csv`
+
+~~~~
+$ python work-at-olist/manage.py import_categories 'Amazon' example.csv
+
+~~~~
