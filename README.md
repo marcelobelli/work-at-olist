@@ -148,3 +148,12 @@ Remove them completely:
 
     docker-compose -f composer-dev.yml -p work-at-olist rm
 
+___
+
+## Running the project
+
+~~~~
+$ cp local.env .env
+$ python work-at-olist/manage.py migrate
+$ python work-at-olist/manage.py runserver
+~~~~
