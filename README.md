@@ -2,6 +2,101 @@
 
 My solution for the Work at Olist test.
 
+The demo is running [here](https://mbelli-wants-to-work-at-olist.herokuapp.com).
+
+## API Documentation
+
+### Listing all channels
+##### Endpoint
+~~~~
+/api/channels/
+~~~~
+This endpoint will bring all channels in the database.
+##### Response
+~~~~json
+{
+    "count": 2,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "channel": "Amazon",
+            "url": "http://127.0.0.1:8000/api/channels/amazon/"
+        },
+        {
+            "channel": "Submarino",
+            "url": "http://127.0.0.1:8000/api/channels/submarino/"
+        }
+    ]
+}
+~~~~
+
+### Channel details
+
+##### Endpoint
+~~~~
+/api/channels/<channel_slug>/
+~~~~
+This endpoint will bring all categories and subcategories of the channel.
+##### Response
+~~~~json
+{
+    "channel": "Ricardo Eletro",
+    "categories": [
+        {
+            "category": "Books",
+            "url": "http://127.0.0.1:8000/api/channels/ricardo-eletro/categories/books/"
+        },
+        {
+            "category": "National Literature",
+            "url": "http://127.0.0.1:8000/api/channels/ricardo-eletro/categories/books-national-literature/"
+        },
+        {
+            "category": "Science Fiction",
+            "url": "http://127.0.0.1:8000/api/channels/ricardo-eletro/categories/books-national-literature-science-fiction/"
+        }
+    ]
+}
+~~~~
+
+### Category details
+
+##### Endpoint
+~~~~
+/api/channels/<channel_slug>/categories/<category_slug>/
+~~~~
+This endpoint will bring all children and parents of the category.
+##### Response
+~~~~json
+{
+    "category": "XBOX 360",
+    "children": [
+        {
+            "category": "Accessories",
+            "url": "http://127.0.0.1:8000/api/channels/submarino/categories/games-xbox-360-accessories/",
+            "children": []
+        },
+        {
+            "category": "Console",
+            "url": "http://127.0.0.1:8000/api/channels/submarino/categories/games-xbox-360-console/",
+            "children": []
+        },
+        {
+            "category": "Games",
+            "url": "http://127.0.0.1:8000/api/channels/submarino/categories/games-xbox-360-games/",
+            "children": []
+        }
+    ],
+    "parent": {
+        "category": "Games",
+        "url": "http://127.0.0.1:8000/api/channels/submarino/categories/games/",
+        "parent": null
+    }
+}
+~~~~
+
+___
+
 ## Creating the local environment
 
 For this to work you'll need:
